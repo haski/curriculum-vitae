@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asy Ronen — Senior Software Architect</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Solarized Light */
+    --base03:  #002b36;
+    --base02:  #073642;
+    --base01:  #586e75;
+    --base00:  #657b83;
+    --base0:   #839496;
+    --base1:   #93a1a1;
+    --base2:   #eee8d5;
+    --base3:   #fdf6e3;
+    --yellow:  #b58900;
+    --orange:  #cb4b16;
+    --red:     #dc322f;
+    --magenta: #d33682;
+    --violet:  #6c71c4;
+    --blue:    #268bd2;
+    --cyan:    #2aa198;
+    --green:   #859900;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  body {
+    font-family: 'IBM Plex Mono', 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+    background: var(--base2);
+    color: var(--base01);
+    font-size: 10.6px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    background: var(--base3);
+    position: relative;
+    overflow: hidden;
+    page-break-after: always;
+  }
+
+  /* Subtle scanline overlay */
+  .page::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 43, 54, 0.015) 2px,
+      rgba(0, 43, 54, 0.015) 4px
+    );
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  /* Top bar — terminal title bar */
+  .terminal-bar {
+    background: var(--base02);
+    color: var(--base1);
+    padding: 6px 16px;
+    font-size: 9.01px;
+    font-family: 'JetBrains Mono', monospace;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: 0.5px;
+  }
+
+  .terminal-dots {
+    display: flex;
+    gap: 5px;
+  }
+
+  .terminal-dots span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    display: block;
+  }
+
+  .dot-red { background: var(--red); }
+  .dot-yellow { background: var(--yellow); }
+  .dot-green { background: var(--green); }
+
+  .terminal-title {
+    flex: 1;
+    text-align: center;
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  /* Main grid layout */
+  .content {
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    min-height: calc(297mm - 28px);
+  }
+
+  .main {
+    padding: 24px 28px 20px 28px;
+  }
+
+  .sidebar {
+    background: var(--base2);
+    padding: 24px 20px 20px 20px;
+    border-left: 1px solid rgba(88, 110, 117, 0.12);
+  }
+
+  /* Header */
+  .header {
+    margin-bottom: 18px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--cyan);
+    position: relative;
+  }
+
+  .header::after {
+    content: '// senior_software_architect.profile';
+    position: absolute;
+    bottom: -14px;
+    right: 0;
+    font-size: 7.95px;
+    color: var(--base1);
+    font-style: italic;
+    letter-spacing: 0.3px;
+  }
+
+  .name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 29.68px;
+    font-weight: 700;
+    color: var(--base03);
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+  }
+
+  .name .cursor {
+    display: inline-block;
+    width: 3px;
+    height: 26px;
+    background: var(--cyan);
+    margin-left: 4px;
+    vertical-align: baseline;
+    animation: blink 1.2s step-end infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  .title-line {
+    font-size: 12.72px;
+    color: var(--blue);
+    font-weight: 500;
+    margin-top: 4px;
+    letter-spacing: 0.3px;
+  }
+
+  .title-line .pipe { color: var(--base1); margin: 0 6px; }
+  .title-line .years { color: var(--cyan); font-weight: 600; }
+
+  .contact {
+    margin-top: 10px;
+    font-size: 9.01px;
+    color: var(--base00);
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .contact a {
+    color: var(--blue);
+    text-decoration: none;
+  }
+
+  .contact .sep {
+    color: var(--yellow);
+    font-weight: 600;
+    font-size: 10.6px;
+  }
+
+  .contact .prompt {
+    color: var(--green);
+    font-weight: 600;
+    margin-right: 2px;
+  }
+
+  /* Section headers */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    margin-top: 18px;
+  }
+
+  .section-header:first-child {
+    margin-top: 8px;
+  }
+
+  .section-header .hash {
+    color: var(--yellow);
+    font-weight: 700;
+    font-size: 12.72px;
+  }
+
+  .section-header h2 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.66px;
+    font-weight: 700;
+    color: var(--base03);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .section-header .line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--base1), transparent);
+    opacity: 0.4;
+  }
+
+  /* Summary */
+  .summary {
+    font-size: 9.54px;
+    color: var(--base01);
+    line-height: 1.65;
+    padding: 10px 12px;
+    background: rgba(238, 232, 213, 0.5);
+    border-left: 3px solid var(--cyan);
+    border-radius: 0 4px 4px 0;
+    margin-bottom: 4px;
+  }
+
+  .summary p {
+    margin-bottom: 4px;
+  }
+
+  .summary p:last-child {
+    margin-bottom: 0;
+  }
+
+  .summary .keyword {
+    color: var(--blue);
+    font-weight: 500;
+  }
+
+  .summary .number {
+    color: var(--magenta);
+    font-weight: 600;
+  }
+
+  .summary .string {
+    color: var(--cyan);
+  }
+
+  /* Experience entries */
+  .exp-entry {
+    margin-bottom: 11px;
+    position: relative;
+    padding-left: 12px;
+  }
+
+  .exp-entry::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 5px;
+    width: 4px;
+    height: 4px;
+    background: var(--green);
+    border-radius: 50%;
+  }
+
+  .exp-header {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 2px;
+  }
+
+  .company {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 11.13px;
+    color: var(--base03);
+  }
+
+  .role {
+    font-size: 10.07px;
+    color: var(--violet);
+    font-weight: 500;
+  }
+
+  .dates {
+    font-size: 8.48px;
+    color: var(--base0);
+    font-style: italic;
+    letter-spacing: 0.3px;
+  }
+
+  .exp-bullets {
+    list-style: none;
+    padding: 0;
+    margin-top: 3px;
+  }
+
+  .exp-bullets li {
+    font-size: 9.01px;
+    color: var(--base01);
+    line-height: 1.55;
+    padding-left: 14px;
+    position: relative;
+    margin-bottom: 1.5px;
+  }
+
+  .exp-bullets li::before {
+    content: '$';
+    position: absolute;
+    left: 0;
+    color: var(--yellow);
+    font-weight: 600;
+    font-size: 8.48px;
+  }
+
+  /* Sidebar styles */
+  .sidebar .section-header {
+    margin-top: 0;
+    margin-bottom: 8px;
+  }
+
+  .sidebar .section-header + .section-header {
+    margin-top: 16px;
+  }
+
+  .sidebar-section {
+    margin-bottom: 16px;
+  }
+
+  .sidebar .section-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.54px;
+    font-weight: 700;
+    color: var(--base03);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(88, 110, 117, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .sidebar .section-title .sym {
+    color: var(--yellow);
+    font-weight: 700;
+  }
+
+  /* Expertise tags */
+  .expertise-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .expertise-list li {
+    font-size: 8.48px;
+    color: var(--base01);
+    line-height: 1.5;
+    padding: 3px 7px;
+    background: var(--base3);
+    border-radius: 3px;
+    border-left: 2px solid var(--cyan);
+    letter-spacing: 0.2px;
+  }
+
+  /* Tech skills */
+  .tech-category {
+    margin-bottom: 8px;
+  }
+
+  .tech-label {
+    font-size: 7.95px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--blue);
+    margin-bottom: 2px;
+  }
+
+  .tech-value {
+    font-size: 9.01px;
+    color: var(--base01);
+    line-height: 1.5;
+  }
+
+  .tech-value .tag {
+    display: inline-block;
+    background: var(--base3);
+    padding: 1px 5px;
+    border-radius: 2px;
+    margin: 1px 1px;
+    font-size: 8.48px;
+    border: 1px solid rgba(88, 110, 117, 0.1);
+  }
+
+  /* Education */
+  .edu-degree {
+    font-size: 10.07px;
+    font-weight: 600;
+    color: var(--base03);
+  }
+
+  .edu-school {
+    font-size: 8.48px;
+    color: var(--base00);
+    margin-top: 1px;
+  }
+
+  .edu-year {
+    font-size: 7.95px;
+    color: var(--base0);
+    font-style: italic;
+  }
+
+  /* Languages */
+  .lang-item {
+    font-size: 9.01px;
+    color: var(--base01);
+    margin-bottom: 2px;
+  }
+
+  .lang-item .level {
+    color: var(--base0);
+    font-style: italic;
+  }
+
+  /* Certifications */
+  .cert-item {
+    font-size: 8.48px;
+    color: var(--base01);
+    margin-bottom: 4px;
+    padding-left: 10px;
+    position: relative;
+    line-height: 1.45;
+  }
+
+  .cert-item::before {
+    content: '~';
+    position: absolute;
+    left: 0;
+    color: var(--green);
+    font-weight: 700;
+  }
+
+  /* Footer */
+  .footer {
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    padding: 6px 28px;
+    font-size: 7.42px;
+    color: var(--base1);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid rgba(147, 161, 161, 0.2);
+    background: rgba(238, 232, 213, 0.3);
+    letter-spacing: 0.3px;
+  }
+
+  .footer .cmd {
+    color: var(--green);
+    font-weight: 500;
+  }
+
+  /* Page 2 */
+  .page-2 .content {
+    grid-template-columns: 1fr 220px;
+  }
+
+  .page-2 .main {
+    padding: 24px 28px 60px 28px;
+  }
+
+  .page-2-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(88, 110, 117, 0.15);
+  }
+
+  .page-2-header .name-sm {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13.78px;
+    font-weight: 700;
+    color: var(--base03);
+  }
+
+  .page-2-header .title-sm {
+    font-size: 9.54px;
+    color: var(--base00);
+    letter-spacing: 0.5px;
+  }
+
+  /* Print styles */
+  @media print {
+    body { background: white; }
+    .page {
+      margin: 0;
+      box-shadow: none;
+      width: 100%;
+      height: 100vh;
+    }
+    .terminal-bar { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .sidebar { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .exp-entry::before { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .expertise-list li { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .summary { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .cursor { animation: none; opacity: 1; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+
+  /* Screen-only shadow for pages */
+  @media screen {
+    .page {
+      box-shadow: 0 4px 40px rgba(0, 43, 54, 0.12);
+      margin: 20px auto;
+      border-radius: 2px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- PAGE 1 -->
+<div class="page">
+  <div class="terminal-bar">
+    <div class="terminal-dots">
+      <span class="dot-red"></span>
+      <span class="dot-yellow"></span>
+      <span class="dot-green"></span>
+    </div>
+    <div class="terminal-title">asy@architect ~ % cat resume.md</div>
+    <div style="width: 50px;"></div>
+  </div>
+
+  <div class="content">
+    <div class="main">
+
+      <!-- Header -->
+      <div class="header">
+        <div class="name">Asy Ronen Ben Arzi<span class="cursor"></span></div>
+        <div class="title-line">Senior Software Architect <span class="pipe">|</span> <span class="years">27+ Years of Experience</span></div>
+        <div class="contact">
+          <span class="prompt">></span> 054-8186256
+          <span class="sep">&bull;</span>
+          <a href="mailto:asy.ronen@gmail.com">asy.ronen@gmail.com</a>
+          <span class="sep">&bull;</span>
+          <a href="https://linkedin.com/in/asyronen">linkedin.com/in/asyronen</a>
+          <span class="sep">&bull;</span>
+          Tel Aviv, Israel
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div class="section-header">
+        <span class="hash">#</span>
+        <h2>Summary</h2>
+        <span class="line"></span>
+      </div>
+      <div class="summary">
+        <p>Seasoned software architect and developer with over <span class="number">27 years</span> of experience specializing in <span class="keyword">large-scale distributed</span> and <span class="keyword">highly concurrent systems</span>.</p>
+        <p>Deep expertise in <span class="keyword">AI coding agents</span> such as <span class="keyword">Claude Code</span>, building <span class="string">AI-first developer productivity environments</span> &mdash; introducing the tools and methodologies that drive real efficiency when working with agents. Extensive knowledge of agent-building platforms including the <span class="keyword">Claude Agent SDK</span> and the <span class="keyword">LangChain / LangGraph</span> framework, as well as agent runtime environments such as <span class="keyword">AWS Bedrock</span>.</p>
+        <p>Proven expertise in leading all technical aspects of the development lifecycle &mdash; from creating technical roadmaps and introducing new technologies to mentoring teams and scaling engineering organizations.</p>
+        <p>Deep knowledge of <span class="keyword">databases and storage systems</span> including NoSQL, NewSQL, and analytic solutions. Track record of building systems with <span class="string">high throughput and low latency</span> serving <span class="number">millions of users</span>, and growing engineering teams from under <span class="number">100</span> to over <span class="number">1,000</span> developers.</p>
+      </div>
+
+      <!-- Experience -->
+      <div class="section-header">
+        <span class="hash">#</span>
+        <h2>Experience</h2>
+        <span class="line"></span>
+      </div>
+
+      <div class="exp-entry">
+        <div class="exp-header">
+          <span class="company">Autodesk</span>
+          <span class="role">Senior Software Architect</span>
+        </div>
+        <div class="dates">Feb 2024 &mdash; Present</div>
+        <ul class="exp-bullets">
+          <li>Site Architect for the Israeli development center, overseeing design and construction of a large-scale online platform serving architects and construction professionals.</li>
+          <li>Drove significant improvements in system reliability, performance, and development efficiency across the site.</li>
+          <li>Coordinated a company-wide initiative to establish an AI-based development process for all developers.</li>
+        </ul>
+      </div>
+
+      <div class="exp-entry">
+        <div class="exp-header">
+          <span class="company">Firebolt</span>
+          <span class="role">Senior Architect</span>
+        </div>
+        <div class="dates">May 2022 &mdash; Dec 2023</div>
+        <ul class="exp-bullets">
+          <li>Led re-architecture of a high-throughput, high-scale cloud database system, transforming it from POC to production-grade.</li>
+          <li>Designed for high responsiveness and streamlined maintainability, enabling faster iteration and reduced overhead.</li>
+        </ul>
+      </div>
+
+      <div class="exp-entry">
+        <div class="exp-header">
+          <span class="company">Wix.com</span>
+          <span class="role">Architect &mdash; Infrastructure</span>
+        </div>
+        <div class="dates">Jul 2021 &mdash; May 2022</div>
+        <ul class="exp-bullets">
+          <li>Led the effort to streamline and unify the infrastructure into a more cohesive, efficient system across the organization.</li>
+        </ul>
+      </div>
+
+      <div class="exp-entry">
+        <div class="exp-header">
+          <span class="company">AppsFlyer</span>
+          <span class="role">Senior Architect</span>
+        </div>
+        <div class="dates">Aug 2017 &mdash; Jul 2021</div>
+        <ul class="exp-bullets">
+          <li>Architect across all R&D groups, supporting organizational growth from under 100 to over 1,000 developers.</li>
+          <li>Re-architected major systems handling millions of events per second, significantly improving throughput and latency.</li>
+          <li>Introduced new programming languages and educated teams; partnered with VP R&D to redesign team structures.</li>
+        </ul>
+      </div>
+
+      <div class="exp-entry">
+        <div class="exp-header">
+          <span class="company">cignal.io</span>
+          <span class="role">Consultant</span>
+        </div>
+        <div class="dates">Apr 2017 &mdash; Jan 2019</div>
+        <ul class="exp-bullets">
+          <li>Designed and helped build a highly efficient, scalable ad-tech bidstream recommendation engine.</li>
+        </ul>
+      </div>
+
+      <div class="exp-entry">
+        <div class="exp-header">
+          <span class="company">Playtech</span>
+          <span class="role">Chief Architect</span>
+        </div>
+        <div class="dates">Jul 2015 &mdash; Jan 2017</div>
+        <ul class="exp-bullets">
+          <li>Led development of a new gaming platform, synchronizing efforts across multiple development sites.</li>
+          <li>Supported the COO in managing development for diverse customers.</li>
+          <li>Conducted technical due diligence for M&A.</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+
+      <div class="sidebar-section">
+        <div class="section-title"><span class="sym">&gt;</span> Expertise</div>
+        <ul class="expertise-list">
+          <li>Technical Leadership & Dev Lifecycle</li>
+          <li>Large-Scale Distributed Systems</li>
+          <li>High Throughput & Low Latency</li>
+          <li>Database & Storage Systems</li>
+          <li>Cloud Architecture & Infra Design</li>
+          <li>Technical Roadmap & Execution</li>
+          <li>Team Mentoring & Tech Adoption</li>
+          <li>AI-Based SDLC for Dev Teams</li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="section-title"><span class="sym">&gt;</span> Tech Skills</div>
+
+        <div class="tech-category">
+          <div class="tech-label">Languages</div>
+          <div class="tech-value">
+            <span class="tag">C++</span>
+            <span class="tag">Scala</span>
+            <span class="tag">Clojure</span>
+            <span class="tag">Java</span>
+            <span class="tag">Python</span>
+            <span class="tag">Rust</span>
+            <span class="tag">Golang</span>
+          </div>
+        </div>
+
+        <div class="tech-category">
+          <div class="tech-label">Databases</div>
+          <div class="tech-value">
+            <span class="tag">SQL</span>
+            <span class="tag">NoSQL</span>
+            <span class="tag">NewSQL</span>
+            <span class="tag">Analytics</span>
+          </div>
+        </div>
+
+        <div class="tech-category">
+          <div class="tech-label">Systems</div>
+          <div class="tech-value">
+            <span class="tag">Distributed</span>
+            <span class="tag">Event-driven</span>
+            <span class="tag">Event Sourcing</span>
+            <span class="tag">Real-time</span>
+            <span class="tag">Streaming</span>
+            <span class="tag">High Availability</span>
+            <span class="tag">Fault Tolerant</span>
+            <span class="tag">Message Queues</span>
+            <span class="tag">Container Orchestration</span>
+            <span class="tag">CI/CD Pipelines</span>
+            <span class="tag">Observability</span>
+            <span class="tag">Low Latency</span>
+            <span class="tag">High Throughput</span>
+          </div>
+        </div>
+
+        <div class="tech-category">
+          <div class="tech-label">Cloud</div>
+          <div class="tech-value">
+            <span class="tag">AWS</span>
+            <span class="tag">GCP</span>
+            <span class="tag">Azure</span>
+          </div>
+        </div>
+
+        <div class="tech-category">
+          <div class="tech-label">Practices</div>
+          <div class="tech-value">
+            <span class="tag">Async Programming</span>
+            <span class="tag">Microservices</span>
+            <span class="tag">Functional Programming</span>
+            <span class="tag">SDD</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="section-title"><span class="sym">&gt;</span> Education</div>
+        <div class="edu-degree">BSc, Computer Science</div>
+        <div class="edu-school">Technion &mdash; Israel Institute of Technology</div>
+        <div class="edu-year">1994 &mdash; 2000</div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="section-title"><span class="sym">&gt;</span> Languages</div>
+        <div class="lang-item">English &mdash; <span class="level">Native / Bilingual</span></div>
+        <div class="lang-item">Hebrew &mdash; <span class="level">Native / Bilingual</span></div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="section-title"><span class="sym">&gt;</span> Certifications</div>
+        <div class="cert-item">Functional Programming Principles in Scala</div>
+        <div class="cert-item">Learning Clojure</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="footer">
+    <span><span class="cmd">cat</span> resume.md | page 1/2</span>
+    <span>Asy Ronen &bull; Senior Software Architect</span>
+  </div>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page page-2">
+  <div class="terminal-bar">
+    <div class="terminal-dots">
+      <span class="dot-red"></span>
+      <span class="dot-yellow"></span>
+      <span class="dot-green"></span>
+    </div>
+    <div class="terminal-title">asy@architect ~ % cat resume.md</div>
+    <div style="width: 50px;"></div>
+  </div>
+
+  <div class="content">
+    <div class="main">
+
+      <div class="page-2-header">
+        <span class="name-sm">Asy Ronen</span>
+        <span class="title-sm">Senior Software Architect</span>
+      </div>
+
+      <div class="section-header" style="margin-top: 0;">
+        <span class="hash">#</span>
+        <h2>Experience (continued)</h2>
+        <span class="line"></span>
+      </div>
+
+      <div class="exp-entry">
+        <div class="exp-header">
+          <span class="company">Outbrain</span>
+          <span class="role">Senior Developer & Architect</span>
+        </div>
+        <div class="dates">May 2013 &mdash; Jul 2015</div>
+        <ul class="exp-bullets">
+          <li>Developed new asynchronous infrastructure, dramatically improving system performance.</li>
+          <li>Introduced new technologies and educated teams on techniques for building high-performance systems.</li>
+        </ul>
+      </div>
+
+      <div class="exp-entry">
+        <div class="exp-header">
+          <span class="company">Microsoft</span>
+          <span class="role">Senior Developer</span>
+        </div>
+        <div class="dates">May 2012 &mdash; May 2013</div>
+        <ul class="exp-bullets">
+          <li>Part of a small innovation team building a new product end-to-end &mdash; from ideation through build and customer validation.</li>
+        </ul>
+      </div>
+
+      <div class="exp-entry">
+        <div class="exp-header">
+          <span class="company">newBrandAnalytics</span>
+          <span class="role">Chief Architect</span>
+        </div>
+        <div class="dates">Apr 2011 &mdash; Jan 2012</div>
+        <ul class="exp-bullets">
+          <li>Established the Israel development site; hired the team, owned the codebase, and created the technical roadmap.</li>
+          <li>Worked closely with stakeholders across the company to ensure product-market alignment.</li>
+        </ul>
+      </div>
+
+      <div class="exp-entry">
+        <div class="exp-header">
+          <span class="company">Delver</span>
+          <span class="role">Tech Lead / Backend Architect</span>
+        </div>
+        <div class="dates">May 2009 &mdash; Apr 2011</div>
+        <ul class="exp-bullets">
+          <li>Built a novel e-commerce platform for Sears combining social media with personalized shopping experiences.</li>
+          <li>Architected the backend for very high scale, advanced search, and social-network-based recommendations.</li>
+        </ul>
+      </div>
+
+      <div class="exp-entry">
+        <div class="exp-header">
+          <span class="company">GigaSpaces</span>
+          <span class="role">Core Architect / Sr. Developer</span>
+        </div>
+        <div class="dates">2006 &mdash; Feb 2009</div>
+        <ul class="exp-bullets">
+          <li>Designed and built a high-throughput, low-latency distributed database engine.</li>
+          <li>Introduced non-blocking IO and async programming to the core, dramatically improving system scale.</li>
+        </ul>
+      </div>
+
+      <div class="exp-entry">
+        <div class="exp-header">
+          <span class="company">Actimize</span>
+          <span class="role">Developer & Architect</span>
+        </div>
+        <div class="dates">2004 &mdash; 2006</div>
+        <ul class="exp-bullets">
+          <li>Redesigned existing systems to dramatically improve scalability; introduced new technologies and educated the team.</li>
+        </ul>
+      </div>
+
+      <div class="exp-entry">
+        <div class="exp-header">
+          <span class="company">AlphaCSP</span>
+          <span class="role">Developer & Infra Team Leader</span>
+        </div>
+        <div class="dates">2003 &mdash; 2004</div>
+        <ul class="exp-bullets">
+          <li>Led rebuilding of an insurance system from scratch for a major client (IDI); designed core infrastructure and mentored the team.</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="sidebar"></div>
+  </div>
+
+  <div class="footer">
+    <span><span class="cmd">cat</span> resume.md | page 2/2</span>
+    <span>Asy Ronen &bull; Senior Software Architect</span>
+  </div>
+</div>
+
+</body>
+</html>
